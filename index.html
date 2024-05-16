@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Infinito</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            width: 30%; /* Largura do container */
+            height: 150px; /* Altura das imagens */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-track {
+            display: flex;
+            position: absolute;
+            animation: none; /* Desativar animação CSS */
+        }
+
+        .slider-item {
+            flex: 0 0 auto; /* Permitindo que as imagens tenham largura variável */
+            max-height: 150px; /* Limitando a altura das imagens */
+        }
+
+        .slider-item img {
+            width: auto; /* Ajustando a largura da imagem automaticamente */
+            max-height: 150px; /* Limitando a altura das imagens */
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slider-item"><img src="https://i.pinimg.com/564x/9f/e9/f8/9fe9f884b76b90426a86a5d1650bcf4c.jpg" alt="Imagem 1"></div>
+            <div class="slider-item"><img src="https://vitralizado.com/wp-content/uploads/2015/04/MMCapit%C3%A3o.gif" alt="Imagem 2"></div>
+            <div class="slider-item"><img src="https://vitralizado.com/wp-content/uploads/2015/04/MMGavi%C3%A3o.gif" alt="Imagem 3"></div>
+            <div class="slider-item"><img src="https://vitralizado.com/wp-content/uploads/2015/04/MMFeiticeira.gif" alt="Imagem 4"></div>
+            <div class="slider-item"><img src="https://vitralizado.com/wp-content/uploads/2015/04/MMLoki.gif" alt="Imagem 5"></div>
+            <div class="slider-item"><img src="https://vitralizado.com/wp-content/uploads/2015/04/MMLoki.gif" alt="Imagem 5"></div>
+            
+            <!-- Adicione mais imagens conforme necessário -->
+        </div>
+    </div>
+
+    <script>
+        const sliderContainer = document.querySelector('.slider-container');
+        const sliderTrack = document.querySelector('.slider-track');
+        const sliderItems = document.querySelectorAll('.slider-item');
+
+        let position = 0;
+        let lastRender = 0;
+        const animationDuration = 10000; // Duração da animação em milissegundos
+
+        function updateSlider(timestamp) {
+            if (!lastRender) lastRender = timestamp;
+            const deltaTime = timestamp - lastRender;
+
+            position += (deltaTime / animationDuration) * (100 / sliderItems.length);
+            if (position >= 100 / sliderItems.length) {
+                position = 0;
+                const firstItem = sliderTrack.querySelector('.slider-item');
+                const clone = firstItem.cloneNode(true);
+                sliderTrack.appendChild(clone);
+                sliderTrack.removeChild(firstItem);
+            }
+
+            sliderTrack.style.transform = `translateX(-${position}%)`;
+
+            lastRender = timestamp;
+            requestAnimationFrame(updateSlider);
+        }
+
+        requestAnimationFrame(updateSlider);
+    </script>
+</body>
+</html>
